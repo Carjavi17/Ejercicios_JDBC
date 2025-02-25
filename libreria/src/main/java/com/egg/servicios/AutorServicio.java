@@ -1,7 +1,6 @@
 package com.egg.servicios;
 
 import java.util.List;
-
 import com.egg.entidades.Autor;
 import com.egg.persistencias.AutorDAO;
 
@@ -28,8 +27,12 @@ public class AutorServicio {
         }
     }
 
-    public Autor buscarAutorPorIdAutor(int id) throws Exception {
+    public Autor buscarAutorPorId(int id) throws Exception {
         return daoAutor.buscarAutor(id);
+    }
+
+    public Autor buscarAutorPorNombre(String nombre) throws Exception {
+        return daoAutor.buscarAutoresPorNombre(nombre).get(0);
     }
 
     public void actualizarAutor(int id, String nombre, Boolean alta) throws Exception {

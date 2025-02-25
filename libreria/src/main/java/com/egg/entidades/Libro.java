@@ -25,7 +25,7 @@ public class Libro {
     private Integer anio;
 
     @Column(name = "ejemplares")
-    private Integer ejemplare;
+    private Integer ejemplares;
 
     @Column(name = "alta")
     private boolean alta;
@@ -65,12 +65,12 @@ public class Libro {
         this.anio = anio;
     }
 
-    public Integer getEjemplare() {
-        return ejemplare;
+    public Integer getEjemplares() {
+        return ejemplares;
     }
 
-    public void setEjemplare(Integer ejemplare) {
-        this.ejemplare = ejemplare;
+    public void setEjemplares(Integer ejemplare) {
+        this.ejemplares = ejemplares;
     }
 
     public Boolean getAlta() {
@@ -99,7 +99,7 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Libro [isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplare=" + ejemplare + ", alta="
+        return "Libro [isbn=" + isbn + ", titulo=" + titulo + ", anio=" + anio + ", ejemplare=" + ejemplares + ", alta="
                 + alta + ", autor=" + autor + ", editorial=" + editorial + "]";
     }    
     
