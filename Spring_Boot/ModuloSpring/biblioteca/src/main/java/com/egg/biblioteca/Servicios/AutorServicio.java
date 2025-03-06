@@ -26,7 +26,7 @@ public class AutorServicio {
     }
 
     @Transactional
-    public void modificarAutor(String nombre, UUID id) {
+    public void modificarAutor(String nombre, UUID id) throws MiExcepcion {
         Optional<Autor> respuesta = autorRepositorio.findById(id);
 
         if (respuesta.isPresent()) {
@@ -40,9 +40,13 @@ public class AutorServicio {
         return autorRepositorio.findById(id).orElse(null);
     }
 
+    @Transactional
+    public Autor getOne(UUID id) {
+        return autorRepositorio.getOne(id);
+    }
+
     public Autor buscarPorNombre(String nombre) {
         return autorRepositorio.findByNombre(nombre).get();
-
     }
 
     public void borrarAutor(UUID id) {

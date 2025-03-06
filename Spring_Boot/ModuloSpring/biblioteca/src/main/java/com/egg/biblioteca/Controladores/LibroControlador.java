@@ -35,6 +35,14 @@ public class LibroControlador {
         return "libro_form.html";
     }
 
+    @GetMapping("/lista")
+    public String listar(ModelMap model) {
+
+        model.put("libros", libroServicio.listarLibros());
+
+        return "libro_list.html";
+    }
+
     @PostMapping("/registro")
     public String registro(
         @RequestParam(required = false) Long isbn,

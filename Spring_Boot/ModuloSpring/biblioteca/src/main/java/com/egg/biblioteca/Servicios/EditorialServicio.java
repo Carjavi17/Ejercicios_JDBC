@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.egg.biblioteca.Entidades.Autor;
 import com.egg.biblioteca.Entidades.Editorial;
 import com.egg.biblioteca.Excepciones.MiExcepcion;
 import com.egg.biblioteca.Respositorios.EditorialRepositorio;
@@ -31,7 +30,7 @@ public class EditorialServicio {
     }
 
     @Transactional
-    public void modificarEditorial(String nombre, UUID id) {
+    public void modificarEditorial(String nombre, UUID id) throws MiExcepcion {
         Optional<Editorial> respuesta = editorialRepositorio.findById(id);
         if (respuesta.isPresent()) {
             Editorial editorial = respuesta.get();
@@ -39,6 +38,11 @@ public class EditorialServicio {
             editorial.setNombre(nombre);
             editorialRepositorio.save(editorial);
         }
+    }
+
+    @Transactional
+    public Editorial getOne(UUID id) {
+        return editorialRepositorio.getOne(id);
     }
 
     private void validar(String nombre) throws MiExcepcion {

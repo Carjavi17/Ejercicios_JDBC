@@ -69,11 +69,7 @@ public class LibroServicio {
 
     @Transactional(readOnly = true)
     public List<Libro> listarLibros() {
-
-        List<Libro> libros = new ArrayList<>();
-
-        libros = libroRepositorio.findAll();
-        return libros;
+        return libroRepositorio.findAll();
     }
 
     @Transactional
