@@ -13,6 +13,15 @@ public class PortalControl {
         return "index.html";
     }
 
+    @GetMapping("/registrar")
+    public String Registrar() {
+        return "registro.html"; 
+    }
+
+    @GetMapping("/login")
+    public String Login() {
+        return "login.html"; 
+    }
+
 
 }
-
