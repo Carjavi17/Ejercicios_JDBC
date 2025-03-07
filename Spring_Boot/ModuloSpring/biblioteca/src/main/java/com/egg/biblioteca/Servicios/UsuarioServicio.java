@@ -1,20 +1,43 @@
 package com.egg.biblioteca.Servicios;
 
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.egg.biblioteca.Entidades.Usuario;
 import com.egg.biblioteca.Excepciones.MiExcepcion;
 import com.egg.biblioteca.Respositorios.UsuarioRepositorio;
+import com.egg.biblioteca.emumeraciones.Rol;
 
 @Service
 public class UsuarioServicio implements UserDetailsService{
 
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
+
+
+    public void registrar(String nombre, String email, String password, String password2) throws MiExcepcion {
+    
+        validar(nombre, email, password, password2);
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNombre(nombre);
+        usuario.setEmail(email);
+        usuario.setPassword(new BCryptPasswordEncoder().encode(password));
+        usuario.setRol(Rol.USER);
+
+        usuarioRepositorio.save(usuario);    
+    
+    }
 
     private void validar(String nombre, String email, String password, String password2) throws MiExcepcion {
 
@@ -31,22 +54,31 @@ public class UsuarioServicio implements UserDetailsService{
         if (!password.equals(password2)) {
             throw new MiExcepcion("Las contraseñas ingresadas deben ser iguales");
         }
-
-        Usuario usuario = new Usuario();
-
-        usuario.setNombre(nombre);
-        usuario.setEmail(email);
-        usuario.setPassword(password);
-        usuario.setRol("ROLE_USER");
-
-        usuarioRepositorio.save(usuario);
-
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
+        Usuario usuario = usuarioRepositorio.findByEmail(email);
+
+        if (usuario == null) {
+
+
+            List<GrantedAuthority> permisos = new ArrayList<>();
+
+            GrantedAuthority p = new SimpleGrantedAuthority("ROLE_" + usuario.getRol().toString());
+
+            permisos.add(p);
+            
+            
+            return new User(usuario.getEmail(), usuario.getPassword(), permisos);
+
+        }else{
+            
+            return null;
+        }       
+
+        
     }
     
 }

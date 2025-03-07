@@ -1,5 +1,9 @@
 package com.egg.biblioteca.Entidades;
 
+import java.util.UUID;
+
+import com.egg.biblioteca.emumeraciones.Rol;
+
 import jakarta.persistence.*;
 
 
@@ -7,8 +11,8 @@ import jakarta.persistence.*;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String nombre;
 
@@ -17,19 +21,19 @@ public class Usuario {
     private String password;
     
     @Enumerated(EnumType.STRING)
-    private String rol;
+    private Rol rol;
 
 
     public Usuario() {
     }
 
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -64,12 +68,12 @@ public class Usuario {
     }
 
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }    
     
