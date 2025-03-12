@@ -1,6 +1,7 @@
 package com.egg.biblioteca.Controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,28 +9,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.egg.biblioteca.Entidades.Usuario;
 import com.egg.biblioteca.Excepciones.MiExcepcion;
 import com.egg.biblioteca.Servicios.UsuarioServicio;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/")
-public class PortalControl {
+public class PortalControlador {
     @Autowired
     private UsuarioServicio usuarioServicio;
 
-    @GetMapping("/")
+    @GetMapping("/")  // Acá es donde realizamos el mapeo
     public String index() {
-        return "index.html";
+        return "index.html";   // Acá es que retornamos con el método. 
     }
 
     @GetMapping("/registrar")
-    public String Registrar() {
-        return "registro.html"; 
-    }
-
-    @GetMapping("/login")
-    public String Login() {
-        return "login.html"; 
+    public String registrar() {
+        return "registro.html";
     }
 
     @PostMapping("/registro")
@@ -44,9 +43,32 @@ public class PortalControl {
             model.put("error", ex.getMessage());
             model.put("nombre", nombre);
             model.put("email", email);
-            return "registro.html";
+            return "registro.html"; // Retornamos al formulario de registro con el mensaje de error.
         }
     }
 
+    @GetMapping("/login")
+    public String login(@RequestParam(required = false) String error, ModelMap modelo) {
+        if (error != null) {
+            modelo.put("error", "Usuario o Contraseña inválidos!");
+        }
+        return "login.html";
+    }
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @GetMapping("/inicio")
+    public String inicio(HttpSession session) {
+        Usuario logueado = (Usuario) session.getAttribute("usuariosession");
+        if (logueado.getRol().toString().equals("ADMIN")) {
+            return "redirect:/admin/dashboard";
+        }
+        return "inicio.html";
+    }
+
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "login.html";
+    }
+    
 }
